@@ -21,7 +21,7 @@ public class Grid {
 		//On place les murs 		Murs == 1
                 for (int i = 0; i < nbLigne; i++) {
                         for (int j = 0; j < nbColonne; j++) {
-                                if (j == 0 || i == 0 || i == nbLigne - 1 || j == nbColonne - 1 || i % 10 == 0 || j % 10 == 0) {
+                                if (i == nbLigne - 1 || j == nbColonne - 1 || i % 10 == 0 || j % 10 == 0) {
                                         map[i][j] = 1;
                                 }
                         }
@@ -41,40 +41,6 @@ public class Grid {
 		}
 		map[ax][ay] = 5;
 		map[bx][by] = 5;
-
-		//Ennemis 			Ennemie == 10
-		int nbEnnemis = (int) Math.abs(etage)*10;
-		while (nbEnnemis > 0) {
-			int x = r.nextInt(nbLigne);
-			int y = r.nextInt(nbColonne);
-			if (map[x][y] == 0) {
-				map[x][y] = 10;
-				nbEnnemis--;
-			}
-		}
-
-		//Pomme				Pomme == 20
-		int cptrPomme = 0; //On place 10 pommes
-		while (cptrPomme < 10) {
-			int x = r.nextInt(nbLigne);
-			int y = r.nextInt(nbColonne);
-			if (map[x][y] == 0) {
-				map[x][y] = 20;
-				cptrPomme++;
-			}
-		}
-
-		//Decors dangereux		DecorsDangereux == 11
-		int nbDecorsD = (int) Math.abs(etage)*5;
-		while (nbDecorsD > 0) {
-			int x = r.nextInt(nbLigne);
-			int y = r.nextInt(nbColonne);
-			if (map[x][y] == 0) {
-				map[x][y] = 10;
-				nbDecorsD--;
-			}
-		}
-
 
 		//Assurer un chemin entre les deux escaliers
 		chemin(ax,ay,bx,by);
