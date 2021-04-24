@@ -11,14 +11,40 @@ public class Grid {
 
         private int nbColonne;
 
-	private int etage;
 
-        public Grid(int nbLigne, int nbColonne, int etage) {
+
+        public Grid(int nbLigne, int nbColonne) {
                 this.map = new int[nbLigne][nbColonne];
                 this.nbLigne = nbLigne;
                 this.nbColonne = nbColonne;
-		this.etage = etage;
-		//On place les murs 		Murs == 1
+
+		//Positionner les escaliers	Escalier == 5
+		Random r = new Random();
+		int tailleChemin = 0;
+		int nbSalle = (nbLigne/10)*(nbColonne/10);
+		int ax = 0, ay =0, bx =0, by =0;
+		while (tailleChemin < nbSalle - 1) {
+			//On place les murs 		Murs == 1
+			creationMur();
+			while (ax == bx && ay == by) {
+				int a = r.nextInt(nbLigne/10);
+				int c = r.nextInt(nbLigne/10);
+				int b = r.nextInt(nbColonne/10);
+				int d = r.nextInt(nbColonne/10);
+				ax = 10*a + 5;
+				bx = 10*c + 5;
+				by = 10*b + 5;
+				ay = 10*d + 5;
+			}
+			//Assurer un chemin entre les deux escaliers
+			tailleChemin = chemin(ax,ay,bx,by);
+			
+		}
+		map[ax][ay] = 5;
+		map[bx][by] = 5;
+        }
+	
+	public void creationMur() {
                 for (int i = 0; i < nbLigne; i++) {
                         for (int j = 0; j < nbColonne; j++) {
                                 if (i == nbLigne - 1 || j == nbColonne - 1 || i % 10 == 0 || j % 10 == 0) {
@@ -26,25 +52,7 @@ public class Grid {
                                 }
                         }
                 }    
-		//Positionner les escaliers	Escalier == 5
-		Random r = new Random();
-		int ax = 0, ay =0, bx =0, by =0;
-		while (ax == bx && ay == by) {
-			int a = r.nextInt(nbLigne/10);
-			int c = r.nextInt(nbLigne/10);
-			int b = r.nextInt(nbColonne/10);
-			int d = r.nextInt(nbColonne/10);
-			ax = 10*a + 5;
-			bx = 10*c + 5;
-			by = 10*b + 5;
-			ay = 10*d + 5;
-		}
-		map[ax][ay] = 5;
-		map[bx][by] = 5;
-
-		//Assurer un chemin entre les deux escaliers
-		chemin(ax,ay,bx,by);
-        }
+	}
 
 	private boolean contient(List<int[]> liste, int[] elem) {
 		for (int i = 0; i < liste.size(); i++) {
@@ -78,8 +86,7 @@ public class Grid {
 		return cpr;
 	}
 
-
-	private void chemin(int xa, int ya, int xb, int yb) {
+	private int chemin(int xa, int ya, int xb, int yb) {
 		int cptr = 0; //nb d'essaie
 		int sizeX = nbLigne/10;
 		int sizeY = nbColonne/10;
@@ -171,6 +178,7 @@ public class Grid {
 			int yii = chemin.get(i+1)[1];
 			this.map[((xi + xii) * 10 + 10)/2][((yi + yii) * 10 + 10)/2] = 0;
 		}
+		return chemin.size();
 	}
 
         public void afficher() {
@@ -182,24 +190,20 @@ public class Grid {
                 }
         }
 
-	public boolean isEnnemi(int x, int y) {
-		return map[x][y] == 10;
-	}
-
-	public boolean isPomme(int x, int y) {
-		return map[x][y] == 20;
-	}
-
-	public boolean isDangereux(int x, int y) {
-		return map[x][y] == 11;
-	}
-
 	public boolean isEscalier(int x, int y) {
 		return map[x][y] == 5;
 	}
 	
 	public boolean isMur(int x, int y) {
 		return map[x][y] == 1;
+	}
+
+	public void setGrille(int x, int y, int nvl) {
+		this.map[x][y] = nvl;
+	}
+
+	public int getGrille(int x, int y) {
+		return map[x][y];
 	}
 }
 
