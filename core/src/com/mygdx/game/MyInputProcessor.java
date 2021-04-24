@@ -5,11 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
 public class MyInputProcessor implements InputProcessor {
-    public boolean movingRight = false;
-    public boolean movingLeft = false;
-    public boolean movingForward = false;
-    public boolean movingBack = false;
+    // Ensemble de booléens qui permettent de définir le déplacement sur la carte
+    private boolean movingRight = false;
+    private boolean movingLeft = false;
+    private boolean movingForward = false;
+    private boolean movingBack = false;
 
+    // Ensemble de méthodes qui permettent de récupérer la valeur d'un booléen de déplacement
     public boolean isMovingBack() {
         return movingBack;
     }
@@ -26,6 +28,7 @@ public class MyInputProcessor implements InputProcessor {
         return movingRight;
     }
 
+    // En fonction de la touche pressé, modifies le booléen associé
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
@@ -45,6 +48,7 @@ public class MyInputProcessor implements InputProcessor {
         return true;
     }
 
+    // En fonction de la touche pressé, modifies le booléen associé
     @Override
     public boolean keyUp(int keycode){
             switch (keycode) {
