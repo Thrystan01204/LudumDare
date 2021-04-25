@@ -8,7 +8,7 @@ public class CedricDesktopLauncher {
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "BananaPeelSplit";
-        config.width = 1280;
+        config.width = 640;
         config.height = 640;
         new LwjglApplication(new BananaPeelSplit(), config);
     }

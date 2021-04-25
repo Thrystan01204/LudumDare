@@ -15,7 +15,7 @@ public class GameScreen implements Screen {
 
     final BananaPeelSplit game;
     OrthographicCamera camera;
-    final Grid gamegrid = new Grid(80,40);
+    final Grid gamegrid = new Grid(40,40);
 
     public Texture murImage;
     public Texture solImage1;
@@ -26,7 +26,7 @@ public class GameScreen implements Screen {
     public GameScreen(final BananaPeelSplit game){
         this.game = game;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1280, 640);
+        camera.setToOrtho(false, 640, 640);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-        for (int i = 0; i < 80; i++) {
+        for (int i = 0; i < 40; i++) {
             for (int j = 0; j < 40; j++) {
                 if (gamegrid.isMur(i, j)) {
                     game.batch.draw(murImage, i * 16, j * 16, 16, 16);
