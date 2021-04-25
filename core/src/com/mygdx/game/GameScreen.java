@@ -49,7 +49,7 @@ public class GameScreen implements Screen {
         escalierMImage = new Texture(Gdx.files.internal(("escalier.png")));
         escalierDImage = new Texture(Gdx.files.internal(("descendre.png")));
         solLave3 = new Texture(Gdx.files.internal(("lavaground.png")));
-        solLave2 = new Texture(Gdx.files.internal(("lavaground2.png")));
+        solLave2 = new Texture(Gdx.files.internal(("lavastone.png")));
         solLave1 = new Texture(Gdx.files.internal(("lavastone.png")));
 
         //Physics
@@ -133,6 +133,9 @@ public class GameScreen implements Screen {
         solImage3.dispose();
         escalierMImage.dispose();
         escalierDImage.dispose();
+        solLave3.dispose();
+        solLave2.dispose();
+        solLave1.dispose();
         world.dispose();
         box2dDebugRender.dispose();
     }
