@@ -8,14 +8,17 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import java.util.*;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class GameScreen implements Screen {
 
     final BananaPeelSplit game;
     OrthographicCamera camera;
-    final Grid gamegrid = new Grid(40,40);
+    final Grid gamegrid;
 
     public Texture murImage;
     public Texture solImage1;
@@ -23,10 +26,30 @@ public class GameScreen implements Screen {
     public Texture solImage3;
     public Texture escalierImage;
 
+    // Physics
+    private World world;
+    private final Box2DDebugRenderer box2dDebugRender;
+
     public GameScreen(final BananaPeelSplit game){
         this.game = game;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 640/3, 640/3);
+        camera.setToOrtho(false, 640, 640);
+
+
+
+        // Textures
+        murImage = new Texture(Gdx.files.internal("wall.png"));
+        solImage1 = new Texture(Gdx.files.internal("ground.png"));
+        solImage2 = new Texture(Gdx.files.internal("ground1.png"));
+        solImage3 = new Texture(Gdx.files.internal("ground2.png"));
+        escalierImage = new Texture(Gdx.files.internal(("escalier.png")));
+
+        //Physics
+        world = new World(new Vector2(0, 0), false);
+
+        box2dDebugRender = new Box2DDebugRenderer();
+
+        gamegrid = new Grid(40,40, world);
     }
 
     @Override
@@ -36,12 +59,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+
+        world.step(1/60f, 6, 2);
+
         ScreenUtils.clear(255, 255, 255, 1);
-        murImage = new Texture(Gdx.files.internal("wall.png"));
-        solImage1 = new Texture(Gdx.files.internal("ground.png"));
-        solImage2 = new Texture(Gdx.files.internal("ground1.png"));
-        solImage3 = new Texture(Gdx.files.internal("ground2.png"));
-        escalierImage = new Texture(Gdx.files.internal(("escalier.png")));
+
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
@@ -64,8 +86,7 @@ public class GameScreen implements Screen {
             }
         }
         game.batch.end();
-
-
+        box2dDebugRender.render(world, camera.combined);
     }
 
     @Override
@@ -97,5 +118,7 @@ public class GameScreen implements Screen {
         solImage2.dispose();
         solImage3.dispose();
         escalierImage.dispose();
+        world.dispose();
+        box2dDebugRender.dispose();
     }
 }

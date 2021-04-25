@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.physics.box2d.*;
+
 import java.util.*;
 import java.lang.*;
 
@@ -11,13 +13,16 @@ public class Grid {
 
         private int nbColonne;
 
+        private World world;
 
 
-        public Grid(int nbLigne, int nbColonne) {
+
+        public Grid(int nbLigne, int nbColonne, World world) {
                 this.map = new int[nbLigne][nbColonne];
                 this.nbLigne = nbLigne;
                 this.nbColonne = nbColonne;
-		Random r = new Random();
+                this.world = world;
+        Random r = new Random();
 
 		//Placer les différents type de sol Sol == 0 1 2 
 		for (int i = 0; i < nbLigne; i++) {
@@ -49,6 +54,7 @@ public class Grid {
 		}
 		map[ax][ay] = 5;
 		map[bx][by] = 5;
+		generateCollisions();
         }
 	
 	public void creationMur() {
@@ -189,7 +195,7 @@ public class Grid {
 		return chemin.size();
 	}
 
-        public void afficher() {
+	public void afficher() {
                 for (int i = 0; i < nbLigne; i++) {
                         for (int j = 0; j < nbColonne; j++) {
                                 System.out.print("[" + map[i][j] + "]");
@@ -197,6 +203,35 @@ public class Grid {
 			System.out.println();
                 }
         }
+
+        private void generateCollisions(){
+        	for(int i=0; i < nbLigne; i++){
+        		for (int j=0; j < nbColonne; j++){
+        			if(map[i][j] == 3){
+        				// C'est un mur
+
+						// Propriétés du corps
+						BodyDef bodyDef = new BodyDef();
+						bodyDef.type = BodyDef.BodyType.StaticBody;
+						bodyDef.position.set(i*16+8, j*16+8);
+
+						// Création du corps dans le monde physique
+						Body body = world.createBody(bodyDef);
+
+						// forme du corps
+						PolygonShape shape = new PolygonShape();
+						shape.setAsBox(8, 8);
+
+						FixtureDef fixtureDef = new FixtureDef();
+						fixtureDef.shape = shape;
+						Fixture fixture = body.createFixture(fixtureDef);
+						shape.dispose();
+					}
+				}
+			}
+		}
+
+
 
 	public boolean isEscalier(int x, int y) {
 		return map[x][y] == 5;
