@@ -26,7 +26,7 @@ public class GameScreen implements Screen {
     public GameScreen(final BananaPeelSplit game){
         this.game = game;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 640, 640);
+        camera.setToOrtho(false, 640/3, 640/3);
     }
 
     @Override
@@ -86,5 +86,10 @@ public class GameScreen implements Screen {
     public void dispose() {
         game.batch.dispose();
         game.font.dispose();
+        murImage.dispose();
+        solImage1.dispose();
+        solImage2.dispose();
+        solImage3.dispose();
+        escalierImage.dispose();
     }
 }

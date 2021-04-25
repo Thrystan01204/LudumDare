@@ -13,7 +13,7 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(final BananaPeelSplit game){
         this.game = game;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1280, 720);
+        camera.setToOrtho(false, 640, 640);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0.2f, 1);
+        ScreenUtils.clear(0, 0, 0, 1);
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
