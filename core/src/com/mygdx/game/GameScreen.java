@@ -53,7 +53,13 @@ public class GameScreen implements Screen {
                 } else if (gamegrid.isEscalier(i,j)) {
                     game.batch.draw(escalierImage, i * 16, j * 16, 16, 16);
                 } else {
+                    if (gamegrid.getGrille(i,j) == 0) {
+                        game.batch.draw(solImage1, i * 16, j * 16, 16, 16);
+                    } else if (gamegrid.getGrille(i,j) == 1) {
                         game.batch.draw(solImage2, i * 16, j * 16, 16, 16);
+                    } else {
+                        game.batch.draw(solImage3, i * 16, j * 16, 16, 16);
+                    }
                 }
             }
         }

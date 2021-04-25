@@ -17,14 +17,21 @@ public class Grid {
                 this.map = new int[nbLigne][nbColonne];
                 this.nbLigne = nbLigne;
                 this.nbColonne = nbColonne;
+		Random r = new Random();
+
+		//Placer les différents type de sol Sol == 0 1 2 
+		for (int i = 0; i < nbLigne; i++) {
+			for (int j = 0; j < nbColonne; j++) {
+				map[i][j] = r.nextInt(3);
+			}
+		}
 
 		//Positionner les escaliers	Escalier == 5
-		Random r = new Random();
 		int tailleChemin = 0;
 		int nbSalle = (nbLigne/10)*(nbColonne/10);
 		int ax = 0, ay =0, bx =0, by =0;
 		while (tailleChemin < nbSalle - 1) {
-			//On place les murs 		Murs == 1
+			//On place les murs 		Murs == 3
 			creationMur();
 			while (ax == bx && ay == by) {
 				int a = r.nextInt(nbLigne/10);
@@ -48,7 +55,7 @@ public class Grid {
                 for (int i = 0; i < nbLigne; i++) {
                         for (int j = 0; j < nbColonne; j++) {
                                 if (i == nbLigne - 1 || j == nbColonne - 1 || i % 10 == 0 || j % 10 == 0) {
-                                        map[i][j] = 1;
+                                        map[i][j] = 3;
                                 }
                         }
                 }    
@@ -171,12 +178,13 @@ public class Grid {
 			}
 			cheminPossible.clear();
 		} while (!egaux(chemin.get(chemin.size() - 1), escalierB));
+		Random r = new Random();
 		for (int i = 0; i < chemin.size() - 1; i++) {
 			int xi = chemin.get(i)[0];
 			int yi = chemin.get(i)[1];
 			int xii = chemin.get(i+1)[0];
 			int yii = chemin.get(i+1)[1];
-			this.map[((xi + xii) * 10 + 10)/2][((yi + yii) * 10 + 10)/2] = 0;
+			this.map[((xi + xii) * 10 + 10)/2][((yi + yii) * 10 + 10)/2] = r.nextInt(3);
 		}
 		return chemin.size();
 	}
@@ -195,7 +203,7 @@ public class Grid {
 	}
 	
 	public boolean isMur(int x, int y) {
-		return map[x][y] == 1;
+		return map[x][y] == 3;
 	}
 
 	public void setGrille(int x, int y, int nvl) {
