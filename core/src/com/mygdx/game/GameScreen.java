@@ -25,7 +25,11 @@ public class GameScreen implements Screen {
     public Texture solImage1;
     public Texture solImage2;
     public Texture solImage3;
-    public Texture escalierImage;
+    public Texture escalierMImage;
+    public Texture escalierDImage;
+    public Texture solLave1;
+    public Texture solLave2;
+    public Texture solLave3;
 
     // Physics
     private World world;
@@ -42,7 +46,11 @@ public class GameScreen implements Screen {
         solImage1 = new Texture(Gdx.files.internal("ground.png"));
         solImage2 = new Texture(Gdx.files.internal("ground1.png"));
         solImage3 = new Texture(Gdx.files.internal("ground2.png"));
-        escalierImage = new Texture(Gdx.files.internal(("escalier.png")));
+        escalierMImage = new Texture(Gdx.files.internal(("escalier.png")));
+        escalierDImage = new Texture(Gdx.files.internal(("descendre.png")));
+        solLave3 = new Texture(Gdx.files.internal(("lavaground.png")));
+        solLave2 = new Texture(Gdx.files.internal(("lavaground2.png")));
+        solLave1 = new Texture(Gdx.files.internal(("lavastone.png")));
 
         //Physics
         world = new World(new Vector2(0, 0), false);
@@ -72,15 +80,20 @@ public class GameScreen implements Screen {
             for (int j = 0; j < 40; j++) {
                 if (gamegrid.isMur(i, j)) {
                     game.batch.draw(murImage, i * 16, j * 16, 16, 16);
-                } else if (gamegrid.isEscalier(i,j)) {
-                    game.batch.draw(escalierImage, i * 16, j * 16, 16, 16);
+                } else if (gamegrid.getGrille(i,j) == 5) {
+                    game.batch.draw(escalierMImage, i * 16, j * 16, 16, 16);
+                }else if (gamegrid.getGrille(i,j) == 6) {
+                        game.batch.draw(escalierDImage, i * 16, j * 16, 16, 16);
                 } else {
                     if (gamegrid.getGrille(i,j) == 0) {
-                        game.batch.draw(solImage1, i * 16, j * 16, 16, 16);
+                        //game.batch.draw(solImage1, i * 16, j * 16, 16, 16);
+                        game.batch.draw(solLave1, i * 16, j * 16, 16, 16);
                     } else if (gamegrid.getGrille(i,j) == 1) {
-                        game.batch.draw(solImage2, i * 16, j * 16, 16, 16);
+                        //game.batch.draw(solImage2, i * 16, j * 16, 16, 16);
+                        game.batch.draw(solLave2, i * 16, j * 16, 16, 16);
                     } else {
-                        game.batch.draw(solImage3, i * 16, j * 16, 16, 16);
+                        game.batch.draw(solLave3, i * 16, j * 16, 16, 16);
+                        //game.batch.draw(solImage3, i * 16, j * 16, 16, 16);
                     }
                 }
             }
@@ -118,7 +131,8 @@ public class GameScreen implements Screen {
         solImage1.dispose();
         solImage2.dispose();
         solImage3.dispose();
-        escalierImage.dispose();
+        escalierMImage.dispose();
+        escalierDImage.dispose();
         world.dispose();
         box2dDebugRender.dispose();
     }

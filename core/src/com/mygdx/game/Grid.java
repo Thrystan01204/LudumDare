@@ -27,7 +27,15 @@ public class Grid {
 		//Placer les différents type de sol Sol == 0 1 2 
 		for (int i = 0; i < nbLigne; i++) {
 			for (int j = 0; j < nbColonne; j++) {
-				map[i][j] = r.nextInt(3);
+					double p = Math.random();
+					if (p <= 0.5) {
+						map[i][j] = 0;
+					} else if (p > 0.5 && p < 0.85) {
+						map[i][j] = 1;
+					} else {
+						map[i][j] = 2;
+					}
+				//map[i][j] = r.nextInt(3);
 			}
 		}
 
@@ -52,8 +60,8 @@ public class Grid {
 			tailleChemin = chemin(ax,ay,bx,by);
 			
 		}
-		map[ax][ay] = 5;
-		map[bx][by] = 5;
+		map[ax][ay] = 5;			//Escalier Montant == 5
+		map[bx][by] = 6;			//Escalier Descendant == 6
 		generateCollisions();
         }
 	
