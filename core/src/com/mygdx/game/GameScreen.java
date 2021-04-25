@@ -1,7 +1,10 @@
 package com.mygdx.game;
 
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -30,6 +33,11 @@ public class GameScreen implements Screen {
     private World world;
     private final Box2DDebugRenderer box2dDebugRender;
 
+
+    // Ligths
+    private final RayHandler rayHandler;
+    private PointLight testLight;
+
     public GameScreen(final BananaPeelSplit game){
         this.game = game;
         camera = new OrthographicCamera();
@@ -50,6 +58,16 @@ public class GameScreen implements Screen {
         box2dDebugRender = new Box2DDebugRenderer();
 
         gamegrid = new Grid(40,40, world);
+
+        // Lights
+        rayHandler = new RayHandler(world);
+        rayHandler.setAmbientLight(0.1f, 0.1f, 0.1f, 1f);
+        rayHandler.setBlurNum(3);
+
+        testLight = new PointLight(rayHandler, 128, new Color(1, 1, 1, 1), 16*4, 0, 0);
+        rayHandler.setShadows(true);
+        testLight.setStaticLight(false);
+        testLight.setSoft(true);
     }
 
     @Override
@@ -61,6 +79,8 @@ public class GameScreen implements Screen {
     public void render(float delta) {
 
         world.step(1/60f, 6, 2);
+
+        testLight.setPosition(Gdx.input.getX(), Gdx.input.getY());
 
         ScreenUtils.clear(255, 255, 255, 1);
 
@@ -86,6 +106,10 @@ public class GameScreen implements Screen {
             }
         }
         game.batch.end();
+
+
+        rayHandler.setCombinedMatrix(camera.combined, 0, 0, 1, 1);
+        rayHandler.updateAndRender();
         box2dDebugRender.render(world, camera.combined);
     }
 
@@ -120,5 +144,6 @@ public class GameScreen implements Screen {
         escalierImage.dispose();
         world.dispose();
         box2dDebugRender.dispose();
+        rayHandler.dispose();
     }
 }
