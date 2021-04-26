@@ -86,7 +86,7 @@ public class Player {
         // indique sur quel type de collision cette forme de l'objet est
         fixtureDefSensor.filter.categoryBits = Collision.PLAYER;
         // indique avec quel type d'objet il va entrer en collision
-        fixtureDefSensor.filter.maskBits = Collision.ENEMY | Collision.OBJECT;
+        fixtureDefSensor.filter.maskBits = Collision.ENEMY | Collision.OBJECT |Collision.ESCALIER_DESCENDANT;
 
 
         collisionSensor = body.createFixture(fixtureDefSensor);

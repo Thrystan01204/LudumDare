@@ -48,7 +48,7 @@ public class GameScreen implements Screen {
 
         //Physics
         world = new World(new Vector2(0, 0), false);
-        customContactListener = new CustomContactListener();
+        customContactListener = new CustomContactListener(game);
 
         world.setContactListener(customContactListener);
 

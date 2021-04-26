@@ -30,6 +30,9 @@ public class Grid {
 
 	private Vector2 startPosition;
 
+	public Body bodyEscalierM;
+	public Body bodyEscalierD;
+
 
 
         public Grid(int nbLigne, int nbColonne, World world, int niveau) {
@@ -81,6 +84,50 @@ public class Grid {
 		map[bx][by] = 6;			//Escalier Descendant == 6
 			startPosition.set(ax*16+8, ay*16+8);
 		generateCollisions();
+
+			BodyDef bodyDefM = new BodyDef();
+			bodyDefM.type = BodyDef.BodyType.KinematicBody;
+			bodyDefM.position.set(new Vector2(ax,ay));
+			bodyDefM.fixedRotation =true;
+			bodyDefM.linearDamping = 0.5f;
+			bodyDefM.allowSleep = false;
+
+			bodyEscalierM = world.createBody(bodyDefM);
+			// forme du corps
+			PolygonShape shapeM = new PolygonShape();
+			shapeM.setAsBox(4, 4);
+
+			FixtureDef fixtureDefM = new FixtureDef();
+			fixtureDefM.shape = shapeM;
+			fixtureDefM.density = 0.5f;
+			fixtureDefM.restitution = 0.8f;
+			// indique sur quel type de collision cette forme de l'objet est
+			fixtureDefM.filter.categoryBits = Collision.ESCALIER_MONTANT;
+			Fixture fixtureM = bodyEscalierM.createFixture(fixtureDefM);
+			shapeM.dispose();
+			fixtureM.setUserData(this);
+
+			BodyDef bodyDefD = new BodyDef();
+			bodyDefD.type = BodyDef.BodyType.KinematicBody;
+			bodyDefD.position.set(new Vector2(bx,by));
+			bodyDefD.fixedRotation =true;
+			bodyDefD.linearDamping = 0.5f;
+			bodyDefD.allowSleep = false;
+
+			bodyEscalierD = world.createBody(bodyDefD);
+			// forme du corps
+			PolygonShape shapeD = new PolygonShape();
+			shapeD.setAsBox(4, 4);
+
+			FixtureDef fixtureDefD = new FixtureDef();
+			fixtureDefD.shape = shapeD;
+			fixtureDefD.density = 0.5f;
+			fixtureDefD.restitution = 0.8f;
+			// indique sur quel type de collision cette forme de l'objet est
+			fixtureDefD.filter.categoryBits = Collision.ESCALIER_DESCENDANT;
+			Fixture fixtureD = bodyEscalierD.createFixture(fixtureDefD);
+			shapeD.dispose();
+			fixtureD.setUserData(this);
 
 
 			escalierMImage = new Texture(Gdx.files.internal(("escalier.png")));

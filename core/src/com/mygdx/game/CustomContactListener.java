@@ -5,6 +5,10 @@ import com.badlogic.gdx.physics.box2d.*;
 
 public class CustomContactListener implements ContactListener {
 
+    final BananaPeelSplit game;
+    public CustomContactListener(final BananaPeelSplit game) {
+        this.game = game;
+    }
     @Override
     public void beginContact(Contact contact) {
 
@@ -25,10 +29,10 @@ public class CustomContactListener implements ContactListener {
 
     }
 
-    public void playerBeginCollisionDetection(Fixture playerFixture, Fixture otherFixture){
+    public void playerBeginCollisionDetection(Fixture playerFixture, Fixture otherFixture) {
         Player player = (Player) playerFixture.getUserData();
 
-        if(otherFixture.getUserData() instanceof Objet ){
+        if (otherFixture.getUserData() instanceof Objet) {
             Objet obj = (Objet) otherFixture.getUserData();
             obj.pickup();
             if (obj.isType() == 11) {
@@ -37,13 +41,13 @@ public class CustomContactListener implements ContactListener {
             } else if (obj.isType() == 12) {
                 player.hurt();
             }
-        } else if(otherFixture.getUserData() instanceof Enemy){
+        } else if (otherFixture.getUserData() instanceof Enemy) {
             Enemy enemy = (Enemy) otherFixture.getUserData();
 
             // c'est une attaque du joueur
-            if(playerFixture.getFilterData().categoryBits == Collision.PLAYER_ATTACK_SENSOR){
+            if (playerFixture.getFilterData().categoryBits == Collision.PLAYER_ATTACK_SENSOR) {
                 Vector2 dir = new Vector2();
-                if(player.body.getLinearVelocity().len2() == 0){
+                if (player.body.getLinearVelocity().len2() == 0) {
                     dir.set(player.facingRight ? 8 : -8, 0);
                 } else {
                     dir.set(player.body.getLinearVelocity());
@@ -53,8 +57,11 @@ public class CustomContactListener implements ContactListener {
             } else {
                 player.hurt();
             }
+        } else if (otherFixture.getFilterData().categoryBits == Collision.ESCALIER_DESCENDANT) {
+            game.setScreen(new GameScreen(game, 2));
         }
     }
+
 
     @Override
     public void endContact(Contact contact) {

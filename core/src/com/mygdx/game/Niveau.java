@@ -12,7 +12,6 @@ public class Niveau implements Screen {
     final BananaPeelSplit game;
 
     public boolean lvl1 = true;
-    public boolean end_game = false;
 
     OrthographicCamera camera;
 
