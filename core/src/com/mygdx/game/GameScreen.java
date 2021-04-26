@@ -62,7 +62,7 @@ public class GameScreen implements Screen {
 
         world.step(1/60f, 6, 2);
 
-        ScreenUtils.clear(255, 255, 255, 1);
+        ScreenUtils.clear(0, 0, 0, 1);
 
         camera.position.set(player.getPosition(), 0);
 
