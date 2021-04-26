@@ -26,6 +26,8 @@ public class GameScreen implements Screen {
 
     public Player player;
 
+    public Objet banane;
+
     // Physics
     private World world;
     private final Box2DDebugRenderer box2dDebugRender;
@@ -33,7 +35,7 @@ public class GameScreen implements Screen {
     public GameScreen(final BananaPeelSplit game) {
         this.game = game;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 640/3, 640/3);
+        camera.setToOrtho(false, 640, 640);
 
 
         //Physics
@@ -44,6 +46,8 @@ public class GameScreen implements Screen {
         gamegrid = new Grid(40, 40, world);
 
         player = new Player(world, gamegrid.getStartPosition());
+
+        banane = new Objet(12, world, new Texture(Gdx.files.internal("peauBanane.png")), new Vector2(100, 100));
     }
 
     @Override
@@ -69,6 +73,7 @@ public class GameScreen implements Screen {
         game.batch.begin();
         gamegrid.render(game.batch);
         player.render(game.batch);
+        banane.render(game.batch);
         game.batch.end();
 
         box2dDebugRender.render(world, camera.combined);
