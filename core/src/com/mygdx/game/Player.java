@@ -143,7 +143,7 @@ public class Player {
             facingRight = false;
         }
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.A)) attack();
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) attack();
 
         direction.nor();
         direction.scl(moveSpeed);

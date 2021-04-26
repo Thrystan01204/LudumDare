@@ -30,9 +30,10 @@ public class Enemy {
     public boolean dead = false;
 
 
-    public Enemy(World world, Vector2 position){
+    public Enemy(World world, Vector2 position, Player player){
         this.world = world;
         this.position = position;
+        this.player = player;
 
         attackTimer = new Timer();
         attackSound = Gdx.audio.newSound(Gdx.files.internal("player_attack.wav"));
@@ -67,6 +68,14 @@ public class Enemy {
         shape.dispose();
         fixture.setUserData(this);
 
+    }
+
+    public void update(){
+        Vector2 dir = player.body.getPosition().cpy().sub(body.getPosition());
+        if(dir.len() < 100){
+            dir.nor();
+            body.setLinearVelocity(dir.scl(32));
+        }
     }
 
     public void dispose(){

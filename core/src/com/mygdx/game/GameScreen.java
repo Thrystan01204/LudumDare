@@ -64,7 +64,7 @@ public class GameScreen implements Screen {
         objets.add(objet);
 
         enemies = new ArrayList<Enemy>();
-        enemies.add(new Enemy(world, gamegrid.getStartPosition().add(-32, -32)));
+        enemies.add(new Enemy(world, gamegrid.getStartPosition().add(-64, -64), player));
 
     }
 
@@ -95,6 +95,8 @@ public class GameScreen implements Screen {
                 world.destroyBody(e.body);
                 enemies.remove(e);
                 e.dispose();
+            } else {
+                e.update();
             }
         }
 
