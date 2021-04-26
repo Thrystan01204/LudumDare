@@ -83,7 +83,7 @@ public class Grid {
 		generateCollisions();
 
 			// Textures
-			murImage = new Texture(Gdx.files.internal("wall.png"));
+			murImage = new Texture(Gdx.files.internal("lavaWall.png"));
 			solImage1 = new Texture(Gdx.files.internal("ground.png"));
 			solImage2 = new Texture(Gdx.files.internal("ground1.png"));
 			solImage3 = new Texture(Gdx.files.internal("ground2.png"));

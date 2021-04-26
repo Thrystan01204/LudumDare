@@ -35,7 +35,7 @@ public class GameScreen implements Screen {
     public GameScreen(final BananaPeelSplit game) {
         this.game = game;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 640, 640);
+        camera.setToOrtho(false, 640/3, 640/3);
 
 
         //Physics
