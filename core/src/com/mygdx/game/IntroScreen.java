@@ -36,14 +36,15 @@ public class IntroScreen implements Screen {
         game.batch.begin();
 
 
-        game.font.draw(game.batch, "While wandering with your friend near a dungeon, he slept on a banana peel.", 100, 290);
+        game.font.draw(game.batch, "While wandering with your friend near a dungeon, he slipt on a banana peel.", 100, 290);
         game.font.draw(game.batch, "Sending him deep down in the dungeon. Now you enter to save him...", 100, 270);
-        game.font.draw(game.batch, "Tap to continue", 245, 240);
+        game.font.draw(game.batch, "ZQSD/WASD to move and SPACE to attack.", 100, 240);
+        game.font.draw(game.batch, "Tap to continue", 100, 210);
 
         game.batch.end();
 
         if(Gdx.input.justTouched()){
-            game.setScreen(new Niveau(game));
+            game.setScreen(new GameScreen(game, game.level));
             mainMusic.stop();
             dispose();
         }

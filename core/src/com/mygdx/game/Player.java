@@ -70,7 +70,7 @@ public class Player {
         // indique sur quel type de collision cette forme de l'objet est
         fixtureDef.filter.categoryBits = Collision.PLAYER;
         // indique avec quel type d'objet il va entrer en collision
-        fixtureDef.filter.maskBits = Collision.MURS | Collision.ENEMY;
+        fixtureDef.filter.maskBits = Collision.MURS | Collision.ENEMY | Collision.ESCALIER_DESCENDANT;
 
         Fixture fixture = body.createFixture(fixtureDef);
         shape.dispose();
@@ -131,14 +131,14 @@ public class Player {
         }
 
         Vector2 direction = new Vector2(0, 0);
-        if(Gdx.input.isKeyPressed(Input.Keys.Z)) direction.y = 1;
+        if(Gdx.input.isKeyPressed(Input.Keys.Z) || Gdx.input.isKeyPressed(Input.Keys.W)) direction.y = 1;
         else if(Gdx.input.isKeyPressed(Input.Keys.S)) direction.y = -1;
 
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
             direction.x = 1;
             facingRight = true;
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
+        else if(Gdx.input.isKeyPressed(Input.Keys.Q) ||Gdx.input.isKeyPressed(Input.Keys.A)){
             direction.x = -1;
             facingRight = false;
         }

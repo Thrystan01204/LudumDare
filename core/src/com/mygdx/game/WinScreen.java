@@ -37,7 +37,8 @@ public class WinScreen implements Screen {
 
 
         game.font.draw(game.batch, "Deep down, you found your friend, banana peel are so slippery aren't they ?", 100, 290);
-        game.font.draw(game.batch, "Tap to resart to game", 100, 270);
+        game.font.draw(game.batch, "You win ! Thanks for playing !", 100, 270);
+        game.font.draw(game.batch, "Tap to resart the game", 100, 240);
 
         game.batch.end();
 

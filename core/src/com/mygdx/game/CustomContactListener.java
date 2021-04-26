@@ -6,8 +6,10 @@ import com.badlogic.gdx.physics.box2d.*;
 public class CustomContactListener implements ContactListener {
 
     final BananaPeelSplit game;
-    public CustomContactListener(final BananaPeelSplit game) {
+    final GameScreen gameScreen;
+    public CustomContactListener(final BananaPeelSplit game, final GameScreen gameScreen) {
         this.game = game;
+        this.gameScreen = gameScreen;
     }
     @Override
     public void beginContact(Contact contact) {
@@ -57,8 +59,13 @@ public class CustomContactListener implements ContactListener {
             } else {
                 player.hurt();
             }
-        } else if (otherFixture.getFilterData().categoryBits == Collision.ESCALIER_DESCENDANT) {
-            game.setScreen(new GameScreen(game, 2));
+        } else if (otherFixture.getUserData() instanceof Grid) {
+            System.out.println("grid");
+            if(otherFixture.getFilterData().categoryBits == Collision.ESCALIER_DESCENDANT){
+                gameScreen.finNiveau = true;
+                System.out.println("fin niveau !!!!!");
+            }
+
         }
     }
 

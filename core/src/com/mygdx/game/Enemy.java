@@ -31,12 +31,15 @@ public class Enemy {
     public boolean dead = false;
 
 
-    public Enemy(World world, Vector2 position, Player player){
+    public Enemy(World world, Vector2 position, Player player, BananaPeelSplit game){
         this.world = world;
         this.position = position;
         this.player = player;
         invincibilityTimer = new Timer();
-        texture = new Texture(Gdx.files.internal("feufollet.png"));
+        if (game.level == 2)
+            texture = new Texture(Gdx.files.internal("feufollet.png"));
+        else
+            texture = new Texture(Gdx.files.internal("bonhommedeneige.png"));
         attackTexture = new Texture(Gdx.files.internal("slash.png"));
 
         vieTexture = new Texture(Gdx.files.internal("coeur.png"));
@@ -61,7 +64,7 @@ public class Enemy {
         // indique sur quel type de collision cette forme de l'objet est
         fixtureDef.filter.categoryBits = Collision.ENEMY;
         // indique avec quel type d'objet il va entrer en collision
-        fixtureDef.filter.maskBits = Collision.MURS | Collision.PLAYER | Collision.PLAYER_ATTACK_SENSOR;
+        fixtureDef.filter.maskBits = Collision.MURS | Collision.PLAYER | Collision.PLAYER_ATTACK_SENSOR | Collision.ENEMY;
 
         Fixture fixture = body.createFixture(fixtureDef);
         shape.dispose();

@@ -37,7 +37,7 @@ public class GameOverScreen implements Screen {
 
 
         game.font.draw(game.batch, "Oh no, you're dead, you can't save your friend now :(", 100, 290);
-        game.font.draw(game.batch, "Tap to resart to game", 100, 270);
+        game.font.draw(game.batch, "Tap to resart the game.", 100, 270);
 
         game.batch.end();
 

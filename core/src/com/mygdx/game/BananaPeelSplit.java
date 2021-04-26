@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class BananaPeelSplit extends Game {
     public SpriteBatch batch;
     public BitmapFont font;
+    public  int level = 1;
 
     @Override
     public void create () {

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import java.util.*;
 import com.badlogic.gdx.physics.box2d.World;
+
 
 public class GameScreen implements Screen {
 
@@ -31,9 +33,11 @@ public class GameScreen implements Screen {
     private Music levelMusic;
     private int niveau;
 
+    public boolean finNiveau = false;
+
     // Physics
     private World world;
-    private final Box2DDebugRenderer box2dDebugRender;
+    //private final Box2DDebugRenderer box2dDebugRender;
 
     public GameScreen(final BananaPeelSplit game, int niveau) {
         this.game = game;
@@ -48,23 +52,49 @@ public class GameScreen implements Screen {
 
         //Physics
         world = new World(new Vector2(0, 0), false);
-        customContactListener = new CustomContactListener(game);
+        customContactListener = new CustomContactListener(game, this);
 
         world.setContactListener(customContactListener);
 
-        box2dDebugRender = new Box2DDebugRenderer();
+        //box2dDebugRender = new Box2DDebugRenderer();
 
         gamegrid = new Grid(40, 40, world, niveau);
 
         player = new Player(world, gamegrid.getStartPosition());
 
-        Objet objet = new Objet(12, world, gamegrid.getStartPosition().add(32, 32));
-
         objets = new ArrayList<Objet>();
-        objets.add(objet);
 
         enemies = new ArrayList<Enemy>();
-        enemies.add(new Enemy(world, gamegrid.getStartPosition().add(-64, -64), player));
+
+        Random r = new Random();
+        for(int i=0; i < 20*game.level; i++){
+
+
+            int x = r.nextInt(40);
+            int y = r.nextInt(40);
+
+            if(!gamegrid.isMur(x,y)){
+                enemies.add(new Enemy(world, new Vector2(x*16+8, y*16+8) , player, game));
+            }
+
+        }
+        for(int i=0; i < 5*(3-game.level); i++){
+
+            int x = r.nextInt(40);
+            int y = r.nextInt(40);
+
+            if(!gamegrid.isMur(x,y)){
+                objets.add(new Objet(11, world, new Vector2(x*16+8, y*16+8)));
+            }
+
+            x = r.nextInt(40);
+            y = r.nextInt(40);
+
+            if(!gamegrid.isMur(x,y)){
+                objets.add(new Objet(12, world, new Vector2(x*16+8, y*16+8)));
+            }
+
+        }
 
     }
 
@@ -75,6 +105,20 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+
+        if(finNiveau){
+            if(game.level == 1){
+                game.level = 2;
+                game.setScreen(new GameScreen(game, game.level));
+                levelMusic.stop();
+                dispose();
+            } else {
+                game.setScreen(new WinScreen(game));
+                levelMusic.stop();
+                dispose();
+            }
+            return;
+        }
 
         if(player.dead){
             game.setScreen(new GameOverScreen(game));
@@ -133,7 +177,7 @@ public class GameScreen implements Screen {
 
         game.batch.end();
 
-        box2dDebugRender.render(world, camera.combined);
+        //box2dDebugRender.render(world, camera.combined);
     }
 
     @Override
@@ -159,7 +203,7 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         world.dispose();
-        box2dDebugRender.dispose();
+        //box2dDebugRender.dispose();
         levelMusic.dispose();
         player.dispose();
     }

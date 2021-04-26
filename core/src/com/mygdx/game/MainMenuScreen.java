@@ -22,6 +22,7 @@ public class MainMenuScreen implements Screen {
         mainMusic = Gdx.audio.newMusic(Gdx.files.internal("bosca_test2.wav"));
         mainMusic.setLooping(true);
         mainMusic.play();
+        game.level = 1;
     }
 
     @Override
@@ -38,6 +39,8 @@ public class MainMenuScreen implements Screen {
         game.batch.begin();
         game.batch.draw(font, 0, 0, 640, 640);
         game.font.draw(game.batch, "Tap anywhere to begin !", 245, 290);
+
+        game.font.draw(game.batch, "Made by JAFFUER Pierre, CAZANOVE Cedric and LE LIDEC Tristan.", 100, 32);
 
         game.batch.end();
 
