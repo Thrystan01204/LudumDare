@@ -76,6 +76,13 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
+        if(player.dead){
+            game.setScreen(new GameOverScreen(game));
+            levelMusic.stop();
+            dispose();
+            return;
+        }
+
         player.handleInputs();
 
         world.step(1/60f, 6, 2);
