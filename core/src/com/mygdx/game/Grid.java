@@ -1,5 +1,8 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
 
 import java.util.*;
@@ -14,6 +17,16 @@ public class Grid {
         private int nbColonne;
 
         private World world;
+
+	private  Texture murImage;
+	private  Texture solImage1;
+	private  Texture solImage2;
+	private  Texture solImage3;
+	private  Texture escalierMImage;
+	private  Texture escalierDImage;
+	private  Texture solLave1;
+	private  Texture solLave2;
+	private  Texture solLave3;
 
 
 
@@ -63,6 +76,17 @@ public class Grid {
 		map[ax][ay] = 5;			//Escalier Montant == 5
 		map[bx][by] = 6;			//Escalier Descendant == 6
 		generateCollisions();
+
+			// Textures
+			murImage = new Texture(Gdx.files.internal("wall.png"));
+			solImage1 = new Texture(Gdx.files.internal("ground.png"));
+			solImage2 = new Texture(Gdx.files.internal("ground1.png"));
+			solImage3 = new Texture(Gdx.files.internal("ground2.png"));
+			escalierMImage = new Texture(Gdx.files.internal(("escalier.png")));
+			escalierDImage = new Texture(Gdx.files.internal(("descendre.png")));
+			solLave3 = new Texture(Gdx.files.internal(("lavaground.png")));
+			solLave2 = new Texture(Gdx.files.internal(("lavastone.png")));
+			solLave1 = new Texture(Gdx.files.internal(("lavastone.png")));
         }
 	
 	public void creationMur() {
@@ -240,11 +264,49 @@ public class Grid {
 		}
 
 
+		public void render(SpriteBatch batch){
+			for (int i = 0; i < 40; i++) {
+				for (int j = 0; j < 40; j++) {
+					if (isMur(i, j)) {
+						batch.draw(murImage, i * 16, j * 16, 16, 16);
+					} else if (getGrille(i,j) == 5) {
+						batch.draw(escalierMImage, i * 16, j * 16, 16, 16);
+					}else if (getGrille(i,j) == 6) {
+						batch.draw(escalierDImage, i * 16, j * 16, 16, 16);
+					} else {
+						if (getGrille(i,j) == 0) {
+							//game.batch.draw(solImage1, i * 16, j * 16, 16, 16);
+							batch.draw(solLave1, i * 16, j * 16, 16, 16);
+						} else if (getGrille(i,j) == 1) {
+							//game.batch.draw(solImage2, i * 16, j * 16, 16, 16);
+							batch.draw(solLave2, i * 16, j * 16, 16, 16);
+						} else {
+							batch.draw(solLave3, i * 16, j * 16, 16, 16);
+							//game.batch.draw(solImage3, i * 16, j * 16, 16, 16);
+						}
+					}
+				}
+			}
+		}
+
+		public void dispose(){
+			murImage.dispose();
+			solImage1.dispose();
+			solImage2.dispose();
+			solImage3.dispose();
+			escalierMImage.dispose();
+			escalierDImage.dispose();
+			solLave3.dispose();
+			solLave2.dispose();
+			solLave1.dispose();
+		}
+
+
 
 	public boolean isEscalier(int x, int y) {
 		return map[x][y] == 5;
 	}
-	
+
 	public boolean isMur(int x, int y) {
 		return map[x][y] == 3;
 	}

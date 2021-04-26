@@ -109,6 +109,7 @@ public class Player {
     public void dispose(){
         texture.dispose();
         attackTexture.dispose();
+        attackSound.dispose();
     }
 
     public void attack(){
