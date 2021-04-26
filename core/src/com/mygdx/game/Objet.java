@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -12,10 +13,12 @@ public class Objet {
     private int type;
 
     private Texture texture;
+    private Sound pickupSound;
+    boolean pickedup = false;
 
     private World world;
 
-    private Body body;
+    public Body body;
 
     final Texture peauBanane = new Texture(Gdx.files.internal("peauBanane.png"));
     final Texture epee = new Texture(Gdx.files.internal("epee.png"));
@@ -25,12 +28,14 @@ public class Objet {
         this.type = type;
         this.world = world;
         this.texture = texture;
+        pickupSound = Gdx.audio.newSound(Gdx.files.internal("object_pickup.wav"));
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.KinematicBody;
         bodyDef.position.set(position);
         bodyDef.fixedRotation =true;
         bodyDef.linearDamping = 0.5f;
+        bodyDef.allowSleep = false;
 
         body = world.createBody(bodyDef);
 
@@ -43,8 +48,11 @@ public class Objet {
         fixtureDef.density = 0.5f;
         fixtureDef.restitution = 0.8f;
 
+        // indique sur quel type de collision cette forme de l'objet est
+        fixtureDef.filter.categoryBits = Collision.OBJECT;
         Fixture fixture = body.createFixture(fixtureDef);
         shape.dispose();
+        fixture.setUserData(this);
     }
 
     //Obtenir le type de l'objet
@@ -54,12 +62,17 @@ public class Objet {
 
     public void render(SpriteBatch batch) {
         if (this.type == 10) {
-            batch.draw(epee, body.getPosition().x - 8, body.getPosition().y - 8, 16, 16);
+            batch.draw(epee, body.getPosition().x - 4, body.getPosition().y - 4, 8, 8);
         } else if (this.type == 11) {
-            batch.draw(potion, body.getPosition().x - 8, body.getPosition().y - 8, 16, 16);
+            batch.draw(potion, body.getPosition().x - 4, body.getPosition().y - 4, 8, 8);
         } else {
-            batch.draw(peauBanane, body.getPosition().x - 8, body.getPosition().y - 8, 16, 16);
+            batch.draw(peauBanane, body.getPosition().x - 4, body.getPosition().y - 4, 8, 8);
         }
+    }
+
+    public void pickup(){
+        pickupSound.play();
+        pickedup = true;
     }
 
     public void dispose(){

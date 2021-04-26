@@ -23,6 +23,7 @@ public class Player {
     private Texture attackTexture;
     private Timer invincibilityTimer;
     private boolean invincibility = false;
+    public Fixture collisionSensor;
 
     private Texture vieTexture;
 
@@ -58,10 +59,34 @@ public class Player {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 1.2f;
         fixtureDef.shape = shape;
+        // indique sur quel type de collision cette forme de l'objet est
+        fixtureDef.filter.categoryBits = Collision.PLAYER;
+        // indique avec quel type d'objet il va entrer en collision
+        fixtureDef.filter.maskBits = Collision.MURS | Collision.ENEMY;
 
         Fixture fixture = body.createFixture(fixtureDef);
-
         shape.dispose();
+
+        // Création du sensor à collision
+        CircleShape shapeSensor = new CircleShape();
+        shapeSensor.setRadius(4);
+        shapeSensor.setPosition(new Vector2(0, -4));
+
+        FixtureDef fixtureDefSensor = new FixtureDef();
+        fixtureDefSensor.shape = shapeSensor;
+        fixtureDefSensor.isSensor = true;
+        // indique sur quel type de collision cette forme de l'objet est
+        fixtureDefSensor.filter.categoryBits = Collision.PLAYER;
+        // indique avec quel type d'objet il va entrer en collision
+        fixtureDefSensor.filter.maskBits = Collision.ENEMY | Collision.OBJECT;
+
+
+        collisionSensor = body.createFixture(fixtureDefSensor);
+        shapeSensor.dispose();
+        // pour le contact listener
+        collisionSensor.setUserData(this);
+
+
     }
 
     public int getVie() {

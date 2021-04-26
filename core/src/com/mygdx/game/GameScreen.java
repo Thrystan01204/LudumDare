@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import java.util.*;
@@ -22,11 +23,9 @@ public class GameScreen implements Screen {
     OrthographicCamera camera;
     final Grid gamegrid;
 
-
-
+    ArrayList<Objet> objets;
     public Player player;
-
-    public Objet objet;
+    private CustomContactListener customContactListener;
 
     // Physics
     private World world;
@@ -40,6 +39,9 @@ public class GameScreen implements Screen {
 
         //Physics
         world = new World(new Vector2(0, 0), false);
+        customContactListener = new CustomContactListener();
+
+        world.setContactListener(customContactListener);
 
         box2dDebugRender = new Box2DDebugRenderer();
 
@@ -47,7 +49,10 @@ public class GameScreen implements Screen {
 
         player = new Player(world, gamegrid.getStartPosition());
 
-        objet = new Objet(10, world, new Vector2(100, 100));
+        Objet objet = new Objet(10, world, gamegrid.getStartPosition().add(32, 32));
+
+        objets = new ArrayList<Objet>();
+        objets.add(objet);
     }
 
     @Override
@@ -62,6 +67,14 @@ public class GameScreen implements Screen {
 
         world.step(1/60f, 6, 2);
 
+        for(int i=0; i < objets.size(); i++){
+            Objet o = objets.get(i);
+            if(o.pickedup){
+                world.destroyBody(o.body);
+                objets.remove(o);
+            }
+        }
+
         ScreenUtils.clear(0, 0, 0, 1);
 
         camera.position.set(player.getPosition(), 0);
@@ -73,7 +86,12 @@ public class GameScreen implements Screen {
         game.batch.begin();
         gamegrid.render(game.batch);
         player.render(game.batch);
-        objet.render(game.batch);
+
+        for(int i=0; i < objets.size(); i++){
+            Objet o = objets.get(i);
+            o.render(game.batch);
+        }
+
         game.batch.end();
 
         box2dDebugRender.render(world, camera.combined);
