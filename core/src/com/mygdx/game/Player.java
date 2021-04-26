@@ -22,8 +22,10 @@ public class Player {
     private boolean attackVisible = false;
     private Texture attackTexture;
 
-    private int health = 100;
-    private int strength = 5;
+    private Texture vieTexture;
+
+    private int vie = 3;
+
     private float moveSpeed = 48.0f;
 
     private boolean facingRight = true;
@@ -34,6 +36,7 @@ public class Player {
         attackSound = Gdx.audio.newSound(Gdx.files.internal("player_attack.wav"));
         texture = new Texture(Gdx.files.internal("Player.png"));
         attackTexture = new Texture(Gdx.files.internal("slash.png"));
+        vieTexture = new Texture(Gdx.files.internal("coeur.png"));
 
 
         BodyDef bodyDef = new BodyDef();
@@ -58,31 +61,14 @@ public class Player {
         shape.dispose();
     }
 
-    public int getHealth() {
-        return health;
+    public int getVie() {
+        return vie;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
+    public void setVie(int vie) {
+        this.vie = vie;
     }
 
-    // Attaque un ennemi
-    // int howMuch : force de l'attaque, quantité de PV à retirer à l'ennemi
-    public int attack(int howMuch){
-        return howMuch;
-    }
-
-    // Fait perdre de la vie à un joueur
-    // int howMuch : quantité de vie à retirer
-    public void loseHealth(int howMuch) {
-        setHealth(getHealth() - howMuch);
-    }
-
-    // Permet de rendre de la vie à un joueur
-    // int howMuch : quantité de vie à ajouter
-    public void gainHealth(int howMuch){
-        setHealth(getHealth() + howMuch);
-    }
 
     public void handleInputs(){
         Vector2 direction = new Vector2(0, 0);
@@ -110,6 +96,7 @@ public class Player {
         texture.dispose();
         attackTexture.dispose();
         attackSound.dispose();
+        vieTexture.dispose();
     }
 
     public void attack(){
@@ -121,14 +108,23 @@ public class Player {
             public void run() {
                 attackVisible = false;
             }
-        }, 0.15f);
+        }, 0.2f);
     }
 
     public void render(SpriteBatch batch){
-        batch.draw(texture, body.getPosition().x-8, body.getPosition().y-8, 16, 16, 0, 0, 16, 16, !facingRight, false);
+
+        float x = body.getPosition().x-8;
+        float y = body.getPosition().y-8;
+
+        batch.draw(texture, x, y, 16, 16, 0, 0, 16, 16, !facingRight, false);
         if(attackVisible){
             float xOffset = facingRight ? 8 : -8;
-            batch.draw(attackTexture, body.getPosition().x-8+xOffset, body.getPosition().y-8, 16, 16, 0, 0, 16, 16, !facingRight, false);
+            batch.draw(attackTexture, x+xOffset, y, 16, 16, 0, 0, 16, 16, !facingRight, false);
+        }
+
+        // affichage de la vie
+        for (int i=0; i < vie; i++){
+            batch.draw(vieTexture, x+i*8-4, y+16, 8, 8);
         }
 
     }
