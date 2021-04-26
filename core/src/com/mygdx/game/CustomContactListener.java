@@ -25,9 +25,16 @@ public class CustomContactListener implements ContactListener {
     }
 
     public void playerBeginCollisionDetection(Fixture playerFixture, Fixture otherFixture){
+        Player player = (Player) playerFixture.getUserData();
         if(otherFixture.getUserData() instanceof Objet ){
             Objet obj = (Objet) otherFixture.getUserData();
             obj.pickup();
+            if (obj.isType() == 11) {
+                player.setVie(player.getVie() + 1);
+            } else if (obj.isType() == 10) {
+            } else if (obj.isType() == 12) {
+                player.setVie(player.getVie() - 1);
+            }
         } else if(otherFixture.getUserData() instanceof Enemy){
             Enemy enemy = (Enemy) otherFixture.getUserData();
         }

@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
 
         player = new Player(world, gamegrid.getStartPosition());
 
-        Objet objet = new Objet(10, world, gamegrid.getStartPosition().add(32, 32));
+        Objet objet = new Objet(12, world, gamegrid.getStartPosition().add(32, 32));
 
         objets = new ArrayList<Objet>();
         objets.add(objet);
