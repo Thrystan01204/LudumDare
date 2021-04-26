@@ -42,7 +42,7 @@ public class MainMenuScreen implements Screen {
         game.batch.end();
 
         if(Gdx.input.justTouched()){
-            game.setScreen(new Niveau(game));
+            game.setScreen(new IntroScreen(game));
             mainMusic.stop();
             dispose();
         }

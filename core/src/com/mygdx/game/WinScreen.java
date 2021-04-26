@@ -1,19 +1,19 @@
 package com.mygdx.game;
 
-        import com.badlogic.gdx.Gdx;
-        import com.badlogic.gdx.Screen;
-        import com.badlogic.gdx.audio.Music;
-        import com.badlogic.gdx.graphics.OrthographicCamera;
-        import com.badlogic.gdx.graphics.Texture;
-        import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.ScreenUtils;
 
-public class GameOverScreen implements Screen {
+public class WinScreen implements Screen {
     final BananaPeelSplit game;
 
     OrthographicCamera camera;
     private Music mainMusic;
 
-    public GameOverScreen(final BananaPeelSplit game){
+    public WinScreen(final BananaPeelSplit game){
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 640);
@@ -36,7 +36,7 @@ public class GameOverScreen implements Screen {
         game.batch.begin();
 
 
-        game.font.draw(game.batch, "Oh no, you're dead, you can't save your friend now :(", 100, 290);
+        game.font.draw(game.batch, "Deep down, you found your friend, banana peel are so slippery aren't they ?", 100, 290);
         game.font.draw(game.batch, "Tap to resart to game", 100, 270);
 
         game.batch.end();
