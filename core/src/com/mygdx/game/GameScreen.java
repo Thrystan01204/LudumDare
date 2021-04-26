@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import java.util.*;
@@ -31,6 +32,8 @@ public class GameScreen implements Screen {
     public Texture solLave2;
     public Texture solLave3;
 
+    public Player player;
+
     // Physics
     private World world;
     private final Box2DDebugRenderer box2dDebugRender;
@@ -38,8 +41,7 @@ public class GameScreen implements Screen {
     public GameScreen(final BananaPeelSplit game) {
         this.game = game;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 640, 640);
-
+        camera.setToOrtho(false, 640/3, 640/3);
 
         // Textures
         murImage = new Texture(Gdx.files.internal("wall.png"));
@@ -58,6 +60,8 @@ public class GameScreen implements Screen {
         box2dDebugRender = new Box2DDebugRenderer();
 
         gamegrid = new Grid(40, 40, world);
+
+        player = new Player(world, new Vector2(640/2, 640/2));
     }
 
     @Override
@@ -68,11 +72,16 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
+        player.handleInputs();
+
         world.step(1/60f, 6, 2);
 
         ScreenUtils.clear(255, 255, 255, 1);
 
+        camera.position.set(player.getPosition(), 0);
+
         camera.update();
+
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
@@ -98,7 +107,10 @@ public class GameScreen implements Screen {
                 }
             }
         }
+        player.render(game.batch);
         game.batch.end();
+
+
 
         box2dDebugRender.render(world, camera.combined);
     }
@@ -138,5 +150,6 @@ public class GameScreen implements Screen {
         solLave1.dispose();
         world.dispose();
         box2dDebugRender.dispose();
+        player.dispose();
     }
 }
