@@ -7,21 +7,19 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class MainMenuScreen implements Screen {
+public class Niveau implements Screen {
+
     final BananaPeelSplit game;
 
-    public Texture font;
-    OrthographicCamera camera;
-    private Music mainMusic;
+    public boolean lvl1 = true;
+    public boolean end_game = false;
 
-    public MainMenuScreen(final BananaPeelSplit game){
+    OrthographicCamera camera;
+
+    public Niveau(final BananaPeelSplit game){
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 640);
-        font = new Texture(Gdx.files.internal("bananapeel.png"));
-        mainMusic = Gdx.audio.newMusic(Gdx.files.internal("bosca_test2.wav"));
-        mainMusic.setLooping(true);
-        mainMusic.play();
     }
 
     @Override
@@ -36,14 +34,23 @@ public class MainMenuScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-        game.batch.draw(font, 0, 0, 640, 640);
         game.font.draw(game.batch, "Tap anywhere to begin !", 245, 290);
 
         game.batch.end();
 
-        if(Gdx.input.isTouched()){
-            game.setScreen(new Niveau(game));
-            mainMusic.stop();
+        if(lvl1) {
+            game.batch.setProjectionMatrix(camera.combined);
+            game.batch.begin();
+            game.font.draw(game.batch, "Level - 1", 300, 320);
+            game.batch.end();
+            game.setScreen(new GameScreen(game, 1));
+            dispose();
+        } else {
+            game.batch.setProjectionMatrix(camera.combined);
+            game.batch.begin();
+            game.font.draw(game.batch, "Level - 2", 300, 320);
+            game.batch.end();
+            game.setScreen(new GameScreen(game, 2));
             dispose();
         }
 
@@ -71,7 +78,5 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        font.dispose();
-        mainMusic.dispose();
     }
 }

@@ -29,13 +29,15 @@ public class GameScreen implements Screen {
     public Player player;
     private CustomContactListener customContactListener;
     private Music levelMusic;
+    private int niveau;
 
     // Physics
     private World world;
     private final Box2DDebugRenderer box2dDebugRender;
 
-    public GameScreen(final BananaPeelSplit game) {
+    public GameScreen(final BananaPeelSplit game, int niveau) {
         this.game = game;
+        this.niveau = niveau;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640/3, 640/3);
 
@@ -52,7 +54,7 @@ public class GameScreen implements Screen {
 
         box2dDebugRender = new Box2DDebugRenderer();
 
-        gamegrid = new Grid(40, 40, world);
+        gamegrid = new Grid(40, 40, world, niveau);
 
         player = new Player(world, gamegrid.getStartPosition());
 

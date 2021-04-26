@@ -19,25 +19,25 @@ public class Grid {
 
         private World world;
 
+        private int niveau;
+
 	private  Texture murImage;
 	private  Texture solImage1;
 	private  Texture solImage2;
 	private  Texture solImage3;
 	private  Texture escalierMImage;
 	private  Texture escalierDImage;
-	private  Texture solLave1;
-	private  Texture solLave2;
-	private  Texture solLave3;
 
 	private Vector2 startPosition;
 
 
 
-        public Grid(int nbLigne, int nbColonne, World world) {
+        public Grid(int nbLigne, int nbColonne, World world, int niveau) {
                 this.map = new int[nbLigne][nbColonne];
                 this.nbLigne = nbLigne;
                 this.nbColonne = nbColonne;
                 this.world = world;
+                this.niveau = niveau;
         Random r = new Random();
 			startPosition = new Vector2();
 
@@ -82,16 +82,23 @@ public class Grid {
 			startPosition.set(ax*16+8, ay*16+8);
 		generateCollisions();
 
+
+			escalierMImage = new Texture(Gdx.files.internal(("escalier.png")));
+			escalierDImage = new Texture(Gdx.files.internal(("descendre.png")));
+
+		if (this.niveau == 2) {
 			// Textures
 			murImage = new Texture(Gdx.files.internal("lavaWall.png"));
+			solImage3 = new Texture(Gdx.files.internal(("lavaground.png")));
+			solImage2 = new Texture(Gdx.files.internal(("lavastone.png")));
+			solImage1 = new Texture(Gdx.files.internal(("lavastone.png")));
+		} else {
+			murImage = new Texture(Gdx.files.internal("wall.png"));
 			solImage1 = new Texture(Gdx.files.internal("ground.png"));
 			solImage2 = new Texture(Gdx.files.internal("ground1.png"));
 			solImage3 = new Texture(Gdx.files.internal("ground2.png"));
-			escalierMImage = new Texture(Gdx.files.internal(("escalier.png")));
-			escalierDImage = new Texture(Gdx.files.internal(("descendre.png")));
-			solLave3 = new Texture(Gdx.files.internal(("lavaground.png")));
-			solLave2 = new Texture(Gdx.files.internal(("lavastone.png")));
-			solLave1 = new Texture(Gdx.files.internal(("lavastone.png")));
+		}
+
         }
 	
 	public void creationMur() {
@@ -281,12 +288,12 @@ public class Grid {
 					} else {
 						if (getGrille(i,j) == 0) {
 							//game.batch.draw(solImage1, i * 16, j * 16, 16, 16);
-							batch.draw(solLave1, i * 16, j * 16, 16, 16);
+							batch.draw(solImage1, i * 16, j * 16, 16, 16);
 						} else if (getGrille(i,j) == 1) {
 							//game.batch.draw(solImage2, i * 16, j * 16, 16, 16);
-							batch.draw(solLave2, i * 16, j * 16, 16, 16);
+							batch.draw(solImage2, i * 16, j * 16, 16, 16);
 						} else {
-							batch.draw(solLave3, i * 16, j * 16, 16, 16);
+							batch.draw(solImage1, i * 16, j * 16, 16, 16);
 							//game.batch.draw(solImage3, i * 16, j * 16, 16, 16);
 						}
 					}
@@ -301,9 +308,6 @@ public class Grid {
 			solImage3.dispose();
 			escalierMImage.dispose();
 			escalierDImage.dispose();
-			solLave3.dispose();
-			solLave2.dispose();
-			solLave1.dispose();
 		}
 
 		public Vector2 getStartPosition(){
