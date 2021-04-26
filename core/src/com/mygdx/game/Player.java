@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Timer;
 public class Player {
 
     private World world;
-    private Body body;
+    public Body body;
 
     private Texture texture;
     private Timer attackTimer;
@@ -24,6 +24,11 @@ public class Player {
     private Timer invincibilityTimer;
     private boolean invincibility = false;
     public Fixture collisionSensor;
+    private Sound playerHurtSound;
+
+    public boolean dead = false;
+
+    public Fixture attackFixture;
 
     private Texture vieTexture;
 
@@ -31,9 +36,10 @@ public class Player {
 
     private float moveSpeed = 48.0f;
 
-    private boolean facingRight = true;
+    public boolean facingRight = true;
 
     public Player(World world, Vector2 position){
+
         this.world = world;
         attackTimer = new Timer();
         invincibilityTimer = new Timer();
@@ -41,6 +47,8 @@ public class Player {
         texture = new Texture(Gdx.files.internal("Player.png"));
         attackTexture = new Texture(Gdx.files.internal("slash.png"));
         vieTexture = new Texture(Gdx.files.internal("coeur.png"));
+        playerHurtSound = Gdx.audio.newSound(Gdx.files.internal("player_hurt.wav"));
+
 
 
         BodyDef bodyDef = new BodyDef();
@@ -97,8 +105,31 @@ public class Player {
         this.vie = vie;
     }
 
+    public void hurt(){
+        if(invincibility) return;
+        playerHurtSound.play();
+        vie--;
+        if(vie <= 0){
+            dead = true;
+            return;
+        }
+        invincibility = true;
+        attackTimer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                invincibility = false;
+            }
+        }, 1f);
+    }
+
 
     public void handleInputs(){
+
+        if(!attackVisible && attackFixture != null){
+            body.destroyFixture(attackFixture);
+            attackFixture = null;
+        }
+
         Vector2 direction = new Vector2(0, 0);
         if(Gdx.input.isKeyPressed(Input.Keys.Z)) direction.y = 1;
         else if(Gdx.input.isKeyPressed(Input.Keys.S)) direction.y = -1;
@@ -125,6 +156,7 @@ public class Player {
         attackTexture.dispose();
         attackSound.dispose();
         vieTexture.dispose();
+        playerHurtSound.dispose();
     }
 
     public void attack(){
@@ -137,10 +169,19 @@ public class Player {
                 attackVisible = false;
             }
         }, 0.2f);
-    }
 
-    public void getHit(){
-        if(invincibility) return;
+        PolygonShape attackShape = new PolygonShape();
+        attackShape.setAsBox(8, 8, new Vector2(facingRight ? 8 : -8, 0), 0);
+
+        FixtureDef attackSensorFixtureDef = new FixtureDef();
+        attackSensorFixtureDef.isSensor = true;
+        attackSensorFixtureDef.filter.categoryBits = Collision.PLAYER_ATTACK_SENSOR;
+        attackSensorFixtureDef.filter.maskBits = Collision.ENEMY;
+        attackSensorFixtureDef.shape = attackShape;
+
+        attackFixture = body.createFixture(attackSensorFixtureDef);
+        attackFixture.setUserData(this);
+        attackShape.dispose();
 
     }
 

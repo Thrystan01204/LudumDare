@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Timer;
@@ -15,6 +16,8 @@ public class Enemy {
     public Body body;
     private Texture texture;
     private Texture vieTexture;
+
+    private Player player;
 
     private int vie = 3;
     private boolean facingRight = true;
@@ -43,7 +46,7 @@ public class Enemy {
         bodyDef.position.set(position);
         bodyDef.allowSleep = false;
         bodyDef.fixedRotation = true;
-        bodyDef.linearDamping = 0.99f;
+        bodyDef.linearDamping = 0.3f;
 
         body = world.createBody(bodyDef);
 
@@ -53,11 +56,12 @@ public class Enemy {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 1.2f;
+        fixtureDef.restitution = 0.5f;
         fixtureDef.shape = shape;
         // indique sur quel type de collision cette forme de l'objet est
         fixtureDef.filter.categoryBits = Collision.ENEMY;
         // indique avec quel type d'objet il va entrer en collision
-        fixtureDef.filter.maskBits = Collision.MURS | Collision.PLAYER;
+        fixtureDef.filter.maskBits = Collision.MURS | Collision.PLAYER | Collision.PLAYER_ATTACK_SENSOR;
 
         Fixture fixture = body.createFixture(fixtureDef);
         shape.dispose();
@@ -71,6 +75,7 @@ public class Enemy {
         attackTexture.dispose();
         attackSound.dispose();
     }
+
     public void attack(){
         if(attackVisible) return;
         attackSound.play();
@@ -102,11 +107,13 @@ public class Enemy {
 
     }
 
-    public void hurt(boolean playerFacingRight){
-        if(playerFacingRight)
-            body.applyLinearImpulse(100, 0, 0, 0, true);
-        else
-            body.applyLinearImpulse(-100, 0, 0, 0, true);
+    public void hurt(Vector2 dir){
+        vie--;
+        if(vie <= 0 ){
+            dead = true;
+            return;
+        }
+        body.applyLinearImpulse(dir.scl(5000), Vector2.Zero, true);
     }
 
     public Vector2 getPosition(){

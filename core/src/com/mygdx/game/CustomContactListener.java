@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class CustomContactListener implements ContactListener {
@@ -26,6 +27,7 @@ public class CustomContactListener implements ContactListener {
 
     public void playerBeginCollisionDetection(Fixture playerFixture, Fixture otherFixture){
         Player player = (Player) playerFixture.getUserData();
+
         if(otherFixture.getUserData() instanceof Objet ){
             Objet obj = (Objet) otherFixture.getUserData();
             obj.pickup();
@@ -33,10 +35,24 @@ public class CustomContactListener implements ContactListener {
                 player.setVie(player.getVie() + 1);
             } else if (obj.isType() == 10) {
             } else if (obj.isType() == 12) {
-                player.setVie(player.getVie() - 1);
+                player.hurt();
             }
         } else if(otherFixture.getUserData() instanceof Enemy){
             Enemy enemy = (Enemy) otherFixture.getUserData();
+
+            // c'est une attaque du joueur
+            if(playerFixture.getFilterData().categoryBits == Collision.PLAYER_ATTACK_SENSOR){
+                Vector2 dir = new Vector2();
+                if(player.body.getLinearVelocity().len2() == 0){
+                    dir.set(player.facingRight ? 8 : -8, 0);
+                } else {
+                    dir.set(player.body.getLinearVelocity());
+                }
+                dir.nor();
+                enemy.hurt(dir);
+            } else {
+                player.hurt();
+            }
         }
     }
 
