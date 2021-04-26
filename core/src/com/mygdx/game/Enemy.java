@@ -22,10 +22,11 @@ public class Enemy {
     private int vie = 3;
     private boolean facingRight = true;
 
-    private Timer attackTimer;
-    private Sound attackSound;
     private boolean attackVisible = false;
     private Texture attackTexture;
+
+    private Timer invincibilityTimer;
+    private boolean invincibility = false;
 
     public boolean dead = false;
 
@@ -34,9 +35,7 @@ public class Enemy {
         this.world = world;
         this.position = position;
         this.player = player;
-
-        attackTimer = new Timer();
-        attackSound = Gdx.audio.newSound(Gdx.files.internal("player_attack.wav"));
+        invincibilityTimer = new Timer();
         texture = new Texture(Gdx.files.internal("feufollet.png"));
         attackTexture = new Texture(Gdx.files.internal("slash.png"));
 
@@ -71,6 +70,7 @@ public class Enemy {
     }
 
     public void update(){
+        if(invincibility) return;
         Vector2 dir = player.body.getPosition().cpy().sub(body.getPosition());
         if(dir.len() < 100){
             dir.nor();
@@ -82,20 +82,8 @@ public class Enemy {
         texture.dispose();
         vieTexture.dispose();
         attackTexture.dispose();
-        attackSound.dispose();
     }
 
-    public void attack(){
-        if(attackVisible) return;
-        attackSound.play();
-        attackVisible = true;
-        attackTimer.scheduleTask(new Timer.Task() {
-            @Override
-            public void run() {
-                attackVisible = false;
-            }
-        }, 0.2f);
-    }
 
     public void render(SpriteBatch batch){
 
@@ -117,12 +105,22 @@ public class Enemy {
     }
 
     public void hurt(Vector2 dir){
+        if(invincibility) return;
         vie--;
         if(vie <= 0 ){
             dead = true;
             return;
         }
-        body.applyLinearImpulse(dir.scl(5000), Vector2.Zero, true);
+
+        body.applyLinearImpulse(dir.scl(50000), Vector2.Zero, true);
+
+        invincibility = true;
+        invincibilityTimer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                invincibility = false;
+            }
+        }, 0.22f);
     }
 
     public Vector2 getPosition(){

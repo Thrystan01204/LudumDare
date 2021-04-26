@@ -114,7 +114,7 @@ public class Player {
             return;
         }
         invincibility = true;
-        attackTimer.scheduleTask(new Timer.Task() {
+        invincibilityTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 invincibility = false;
