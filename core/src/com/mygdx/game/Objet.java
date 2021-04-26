@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -16,7 +17,11 @@ public class Objet {
 
     private Body body;
 
-    public Objet(int type, World world, Texture texture, Vector2 position) {
+    final Texture peauBanane = new Texture(Gdx.files.internal("peauBanane.png"));
+    final Texture epee = new Texture(Gdx.files.internal("epee.png"));
+    final Texture potion = new Texture(Gdx.files.internal("potion.png"));
+
+    public Objet(int type, World world, Vector2 position) {
         this.type = type;
         this.world = world;
         this.texture = texture;
@@ -48,11 +53,19 @@ public class Objet {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(texture, body.getPosition().x - 4, body.getPosition().y - 4, 8, 8);
+        if (this.type == 10) {
+            batch.draw(epee, body.getPosition().x - 8, body.getPosition().y - 8, 16, 16);
+        } else if (this.type == 11) {
+            batch.draw(potion, body.getPosition().x - 8, body.getPosition().y - 8, 16, 16);
+        } else {
+            batch.draw(peauBanane, body.getPosition().x - 8, body.getPosition().y - 8, 16, 16);
+        }
     }
 
     public void dispose(){
-        texture.dispose();
+        peauBanane.dispose();
+        epee.dispose();
+        potion.dispose();
     }
 
 
