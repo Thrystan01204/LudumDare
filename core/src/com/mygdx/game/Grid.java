@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 import java.util.*;
@@ -28,6 +29,8 @@ public class Grid {
 	private  Texture solLave2;
 	private  Texture solLave3;
 
+	private Vector2 startPosition;
+
 
 
         public Grid(int nbLigne, int nbColonne, World world) {
@@ -36,6 +39,7 @@ public class Grid {
                 this.nbColonne = nbColonne;
                 this.world = world;
         Random r = new Random();
+			startPosition = new Vector2();
 
 		//Placer les différents type de sol Sol == 0 1 2 
 		for (int i = 0; i < nbLigne; i++) {
@@ -75,6 +79,7 @@ public class Grid {
 		}
 		map[ax][ay] = 5;			//Escalier Montant == 5
 		map[bx][by] = 6;			//Escalier Descendant == 6
+			startPosition.set(ax*16+8, ay*16+8);
 		generateCollisions();
 
 			// Textures
@@ -299,6 +304,10 @@ public class Grid {
 			solLave3.dispose();
 			solLave2.dispose();
 			solLave1.dispose();
+		}
+
+		public Vector2 getStartPosition(){
+			return startPosition;
 		}
 
 

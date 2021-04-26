@@ -43,7 +43,7 @@ public class GameScreen implements Screen {
 
         gamegrid = new Grid(40, 40, world);
 
-        player = new Player(world, new Vector2(640/2, 640/2));
+        player = new Player(world, gamegrid.getStartPosition());
     }
 
     @Override
