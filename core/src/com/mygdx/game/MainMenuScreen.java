@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -11,12 +12,16 @@ public class MainMenuScreen implements Screen {
 
     public Texture font;
     OrthographicCamera camera;
+    private Music mainMusic;
 
     public MainMenuScreen(final BananaPeelSplit game){
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 640);
         font = new Texture(Gdx.files.internal("bananapeel.png"));
+        mainMusic = Gdx.audio.newMusic(Gdx.files.internal("bosca_test2.wav"));
+        mainMusic.setLooping(true);
+        mainMusic.play();
     }
 
     @Override
@@ -38,6 +43,7 @@ public class MainMenuScreen implements Screen {
 
         if(Gdx.input.isTouched()){
             game.setScreen(new GameScreen(game));
+            mainMusic.stop();
             dispose();
         }
 
@@ -66,5 +72,6 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
         font.dispose();
+        mainMusic.dispose();
     }
 }

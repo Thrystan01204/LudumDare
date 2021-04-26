@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,8 +25,10 @@ public class GameScreen implements Screen {
     final Grid gamegrid;
 
     ArrayList<Objet> objets;
+    ArrayList<Enemy> enemies;
     public Player player;
     private CustomContactListener customContactListener;
+    private Music levelMusic;
 
     // Physics
     private World world;
@@ -35,6 +38,10 @@ public class GameScreen implements Screen {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640/3, 640/3);
+
+        levelMusic = Gdx.audio.newMusic(Gdx.files.internal("dungeon.wav"));
+        levelMusic.setLooping(true);
+        levelMusic.play();
 
 
         //Physics
@@ -53,6 +60,10 @@ public class GameScreen implements Screen {
 
         objets = new ArrayList<Objet>();
         objets.add(objet);
+
+        enemies = new ArrayList<Enemy>();
+        enemies.add(new Enemy(world, gamegrid.getStartPosition().add(-32, -32)));
+
     }
 
     @Override
@@ -72,6 +83,16 @@ public class GameScreen implements Screen {
             if(o.pickedup){
                 world.destroyBody(o.body);
                 objets.remove(o);
+                o.dispose();
+            }
+        }
+
+        for(int i=0; i < enemies.size(); i++){
+            Enemy e = enemies.get(i);
+            if(e.dead){
+                world.destroyBody(e.body);
+                enemies.remove(e);
+                e.dispose();
             }
         }
 
@@ -85,12 +106,19 @@ public class GameScreen implements Screen {
 
         game.batch.begin();
         gamegrid.render(game.batch);
-        player.render(game.batch);
+
 
         for(int i=0; i < objets.size(); i++){
             Objet o = objets.get(i);
             o.render(game.batch);
         }
+
+        for(int i=0; i < enemies.size(); i++){
+            Enemy e = enemies.get(i);
+            e.render(game.batch);
+        }
+
+        player.render(game.batch);
 
         game.batch.end();
 
@@ -121,6 +149,7 @@ public class GameScreen implements Screen {
     public void dispose() {
         world.dispose();
         box2dDebugRender.dispose();
+        levelMusic.dispose();
         player.dispose();
     }
 }
