@@ -22,14 +22,22 @@ public class Objet {
         this.texture = texture;
 
         BodyDef bodyDef = new BodyDef();
-        this.body = world.createBody(bodyDef);
-        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.type = BodyDef.BodyType.KinematicBody;
         bodyDef.position.set(position);
+        bodyDef.fixedRotation =true;
+        bodyDef.linearDamping = 0.5f;
+
+        body = world.createBody(bodyDef);
+
         // forme du corps
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(8, 8);
+        shape.setAsBox(4, 4);
+
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
+        fixtureDef.density = 0.5f;
+        fixtureDef.restitution = 0.8f;
+
         Fixture fixture = body.createFixture(fixtureDef);
         shape.dispose();
     }
@@ -40,7 +48,7 @@ public class Objet {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(texture, body.getPosition().x - 8, body.getPosition().y - 8, 16, 16);
+        batch.draw(texture, body.getPosition().x - 4, body.getPosition().y - 4, 8, 8);
     }
 
     public void dispose(){

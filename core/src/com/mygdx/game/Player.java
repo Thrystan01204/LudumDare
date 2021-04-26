@@ -21,6 +21,8 @@ public class Player {
     private Sound attackSound;
     private boolean attackVisible = false;
     private Texture attackTexture;
+    private Timer invincibilityTimer;
+    private boolean invincibility = false;
 
     private Texture vieTexture;
 
@@ -33,6 +35,7 @@ public class Player {
     public Player(World world, Vector2 position){
         this.world = world;
         attackTimer = new Timer();
+        invincibilityTimer = new Timer();
         attackSound = Gdx.audio.newSound(Gdx.files.internal("player_attack.wav"));
         texture = new Texture(Gdx.files.internal("Player.png"));
         attackTexture = new Texture(Gdx.files.internal("slash.png"));
@@ -109,6 +112,11 @@ public class Player {
                 attackVisible = false;
             }
         }, 0.2f);
+    }
+
+    public void getHit(){
+        if(invincibility) return;
+
     }
 
     public void render(SpriteBatch batch){
